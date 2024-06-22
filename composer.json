@@ -1,0 +1,17 @@
+{
+    "name": "hridoy/money-management-cli",
+    "description": "This a simple CLI app for money management",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "RoyHridoy",
+            "email": "royhridoy1428@gmail.com"
+        }
+    ],
+    "require": {}
+}
