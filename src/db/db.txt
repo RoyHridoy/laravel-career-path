@@ -1,0 +1,77 @@
+{
+    "transactions": [
+        {
+            "id": 1,
+            "amount": 500,
+            "type": "INCOME",
+            "category_id": 2
+        },
+        {
+            "id": 2,
+            "amount": 200,
+            "type": "EXPENSE",
+            "category_id": 3
+        },
+        {
+            "id": 3,
+            "amount": 150,
+            "type": "EXPENSE",
+            "category_id": 1
+        },
+        {
+            "id": 4,
+            "amount": 750,
+            "type": "INCOME",
+            "category_id": 2
+        },
+        {
+            "id": 5,
+            "amount": 300,
+            "type": "EXPENSE",
+            "category_id": 4
+        },
+        {
+            "id": 6,
+            "amount": 600,
+            "type": "INCOME",
+            "category_id": 5
+        }
+    ],
+    "categories": [
+        {
+            "id": 1,
+            "name": "Rent",
+            "type": "EXPENSE"
+        },
+        {
+            "id": 2,
+            "name": "Business",
+            "type": "INCOME"
+        },
+        {
+            "id": 3,
+            "name": "Groceries",
+            "type": "EXPENSE"
+        },
+        {
+            "id": 4,
+            "name": "Utilities",
+            "type": "EXPENSE"
+        },
+        {
+            "id": 5,
+            "name": "Salary",
+            "type": "INCOME"
+        },
+        {
+            "id": 6,
+            "name": "Entertainment",
+            "type": "EXPENSE"
+        },
+        {
+            "id": 7,
+            "name": "Investment",
+            "type": "INCOME"
+        }
+    ]
+}
