@@ -10,3 +10,8 @@ enum Options: int {
     case VIEW_CATAGORIES = 6;
     case EXIT            = 7;
 }
+
+enum Type: string {
+    case INCOME = 'INCOME';
+    case EXPENSE = 'EXPENSE';
+}
