@@ -33,32 +33,96 @@ class MoneyManager
     public function viewCategories(): void
     {
         foreach ( $this->categories->getCategories() as $category ) {
-            printf( "%s: %s\n", str_pad( $category->type, 8 ), $category->name );
+            printf( "%s: %s\n", str_pad( $category->type, 8 ), ucfirst( $category->name ) );
         }
     }
 
     public function viewSpecificCategories( Type $type ): void
     {
         foreach ( $this->categories->getSpecificCategoryTypes( $type ) as $item ) {
-            printf( "%d. %s\n", $item->id, $item->name );
+            printf( "%d. %s\n", $item->id, ucfirst( $item->name ) );
         }
     }
-    // TODO: implement notification that transaction added successfully
-    // TODO: 
-    public function addTransaction(Type $type):void
+
+    public function addTransaction( Type $type ): bool
     {
-        $amount     = $this->inputAmount();
+        $amount = $this->inputAmount();
+        if ( $amount <= 0 ) {
+            printf( "⛔ Transaction is not possible.\nAmount must be greater than 0\nTry from Scratch\n" );
+            return false;
+        }
+
         $categoryId = $this->inputCategoryId( $type );
-        $this->transactions->addTransaction( $amount, $categoryId, $type );
-        $this->storeData();
+        if ( $type->value === Type::EXPENSE->value && $this->transactions->getSavings() < $amount ) {
+            printf( "⛔ Transaction is not possible.\nYour savings(%d) is less than your expense(%d)\nRetry with a valid amount\n", $this->transactions->getSavings(), $amount );
+            return false;
+        }
+
+        $isValidTransaction = $this->transactions->insertTransaction( $amount, $categoryId, $type );
+        if ( $isValidTransaction ) {
+            $this->storeData();
+            printf( "✅ Transaction added Successfully.\n" );
+            return true;
+        }
     }
 
-    private function inputAmount(): int
+    public function addCategory(): bool
     {
-        $amount = intval( readline( "Enter amount: " ) );
+        $type = $this->inputCategoryType();
+        if ( !$type ) {
+            return false;
+        }
+
+        $categoryName = $this->inputCategoryName( $type );
+        if ( !$categoryName ) {
+            return false;
+        }
+
+        $isValidCategory = $this->categories->insertCategory( $type, $categoryName );
+        if ( $isValidCategory ) {
+            $this->storeData();
+            printf( "✅ Category added Successfully.\n" );
+            return true;
+        }
+    }
+
+    private function inputCategoryName( string $type ): string | bool
+    {
+        if ( Type::INCOME->value === $type ) {
+            $existingCategories = $this->categories->getAllIncomeCategories();
+        }
+        if ( Type::EXPENSE->value === $type ) {
+            $existingCategories = $this->categories->getAllExpenseCategories();
+        }
+
+        $categoryName = strtolower( readline( "Enter Category name: " ) );
+        if ( in_array( $categoryName, $existingCategories ) ) {
+            printf( "⛔ This category already exists! ⛔\nTry again from scratch\n" );
+            return false;
+        }
+        return $categoryName;
+    }
+
+    private function inputCategoryType(): string | bool
+    {
+        printf( "Choose Category Type:\n1. INCOME\n2. EXPENSE\n" );
+        $type = intval( readline( "Enter Category number(1 or 2): " ) );
+        if ( $type === 1 ) {
+            return Type::INCOME->value;
+        }
+        if ( $type === 2 ) {
+            return Type::EXPENSE->value;
+        }
+        printf( "⛔ Invalid Category ⛔\nTry again with valid category\n" );
+        return false;
+    }
+
+    private function inputAmount(): float
+    {
+        $amount = floatval( readline( "Enter amount: " ) );
         while ( !$amount ) {
-            printf( "❌ Invalid Amount! Please Provide Valid Amount.\n" );
-            $amount = intval( readline( "Enter valid amount: " ) );
+            printf( "⛔ Invalid Amount! Please Provide Valid Amount.\n" );
+            $amount = floatval( readline( "Enter valid amount: " ) );
         }
         return $amount;
     }
@@ -77,7 +141,7 @@ class MoneyManager
 
         $categoryId = intval( readline( "Enter Category number: " ) );
         while ( !in_array( $categoryId, $categories ) ) {
-            printf( "❌ Invalid Category Input. Please Provide Valid Category\n" );
+            printf( "⛔ Invalid Category Number.\nPlease Provide Valid Category Number from above list\n" );
             $categoryId = intval( readline( "Enter valid Category number: " ) );
         }
         return $categoryId;
@@ -113,8 +177,8 @@ class MoneyManager
         $total = 0;
         foreach ( $this->getIncomesOrExpenses( $items ) as $item ) {
             $total += $item["amount"];
-            printf( "%s: %10.2f\n", str_pad( $item["category"], 20 ), $item["amount"] );
+            printf( "%s: %12.2f\n", str_pad( ucfirst( $item["category"] ), 20 ), $item["amount"] );
         }
-        printf( "---------------------------------\n%s: %10.2f\n", str_pad( "Total amount", 20 ), $total );
+        printf( "------------------------------------\n%s: %12.2f\n", str_pad( "Total amount", 20 ), $total );
     }
 }

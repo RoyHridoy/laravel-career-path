@@ -31,6 +31,27 @@ class Category
         return array_column( $this->getSpecificCategoryTypes( Type::EXPENSE ), "id" );
     }
 
+    public function getAllIncomeCategories()
+    {
+        return array_column( $this->getSpecificCategoryTypes( Type::INCOME ), "name" );
+    }
+
+    public function getAllExpenseCategories()
+    {
+        return array_column( $this->getSpecificCategoryTypes( Type::EXPENSE ), "name" );
+    }
+
+    public function insertCategory( string $type, string $name )
+    {
+        
+        array_push( $this->categories, (object) [
+            "id"   => $this->generateCategoryId(),
+            "name" => $name,
+            "type" => $type,
+        ] );
+        return true;
+    }
+
     private function generateCategoryId(): int
     {
         $maxId = max( array_column( $this->categories, "id" ) );

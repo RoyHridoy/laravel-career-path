@@ -30,8 +30,7 @@ class Transaction
         return $this->getTotalIncome() - $this->getTotalExpense();
     }
 
-    // TODO:: rename this function add add validation if savings is less that expense
-    public function addTransaction( float $amount, int $categoryId, Type $type ): bool
+    public function insertTransaction( float $amount, int $categoryId, Type $type ): bool
     {
         array_push( $this->transactions, (object) [
             "id"          => $this->generateTransactionId(),
