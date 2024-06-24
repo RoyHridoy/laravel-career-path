@@ -1,27 +1,17 @@
 <?php
 namespace App;
 
+use Exception;
+
 class FileStorage
 {
-    public const DB = "src/db/db.txt";
-    public function test()
+    public string $DB;
+
+    public function __construct()
     {
-        print "test";
+        if ( !file_exists( "src/db/db.txt" ) ) {
+            throw new Exception( "Database File isn't Found" );
+        }
+        $this->DB = "src/db/db.txt";
     }
-
-    // public function __construct()
-    // {
-
-    // }
-
-    // public function getSavings(): array
-    // {
-
-    // }
 }
-
-// $data = new FileStorage;
-// print_r( $data->getCategories() );
-// $data->printCategories();
-// print_r( $data->getExpenses() );
-// print_r( $data->getIncomes() );

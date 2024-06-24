@@ -54,7 +54,7 @@ class MoneyManager
 
         $categoryId = $this->inputCategoryId( $type );
         if ( $type->value === Type::EXPENSE->value && $this->transactions->getSavings() < $amount ) {
-            printf( "⛔ Transaction is not possible.\nYour savings(%d) is less than your expense(%d)\nRetry with a valid amount\n", $this->transactions->getSavings(), $amount );
+            printf( "⛔ Transaction is not possible.\nYour savings(%.2f) is less than your expense(%.2f)\nRetry with a logical amount.\n", $this->transactions->getSavings(), $amount );
             return false;
         }
 
@@ -84,6 +84,28 @@ class MoneyManager
             printf( "✅ Category added Successfully.\n" );
             return true;
         }
+    }
+
+    public function resetTransaction()
+    {
+        printf( "⚠️ This will remove all of your transactions and the categories you added manually.\n Only Default Categories remain. Are you really sure❓\n  1. Confirm\n  0. Cancel\n" );
+        $confirm = intval( readline( "Press 1 or 0: " ) );
+        if ( 0 === $confirm ) {
+            return false;
+        }
+        if ( 1 === $confirm ) {
+            file_put_contents( $this->file->DB, json_encode( [
+                "categories"   => json_decode( $this->categories->getDefaultCategories() ),
+                "transactions" => [],
+            ] ), LOCK_EX );
+            $data               = $this->fetchAllData();
+            $this->categories   = new Category( $data->categories );
+            $this->transactions = new Transaction( $data->transactions );
+            printf( "✅ Successfully Reset the Application.\n" );
+            return true;
+        }
+        printf( "⛔ Invalid Key. Try Later\n" );
+        return false;
     }
 
     private function inputCategoryName( string $type ): string | bool
@@ -149,7 +171,7 @@ class MoneyManager
 
     private function storeData()
     {
-        file_put_contents( $this->file::DB, json_encode( [
+        file_put_contents( $this->file->DB, json_encode( [
             "categories"   => $this->categories->getCategories(),
             "transactions" => $this->transactions->getTransactions(),
         ] ), LOCK_EX );
@@ -157,7 +179,7 @@ class MoneyManager
 
     private function fetchAllData(): object
     {
-        return json_decode( file_get_contents( $this->file::DB ) );
+        return json_decode( file_get_contents( $this->file->DB ) );
     }
 
     private function getIncomesOrExpenses( array $items ): array
@@ -174,6 +196,11 @@ class MoneyManager
 
     private function viewIncomesOrExpenses( array $items ): void
     {
+        if ( count( $items ) === 0 ) {
+            printf( "You have No Transaction to show\n" );
+            return;
+        }
+
         $total = 0;
         foreach ( $this->getIncomesOrExpenses( $items ) as $item ) {
             $total += $item["amount"];
