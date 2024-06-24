@@ -1,5 +1,6 @@
 {
     "name": "hridoy/money-management-cli",
+    "version": "1.0.0",
     "description": "This a simple CLI app for money management",
     "type": "project",
     "autoload": {

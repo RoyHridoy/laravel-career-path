@@ -30,27 +30,27 @@ class Category
         return array_filter( $this->categories, fn( $category ) => $category->type === $type->value );
     }
 
-    public function getAllIncomeCategoryIds()
+    public function getAllIncomeCategoryIds(): array
     {
         return array_column( $this->getSpecificCategoryTypes( Type::INCOME ), "id" );
     }
 
-    public function getAllExpenseCategoryIds()
+    public function getAllExpenseCategoryIds(): array 
     {
         return array_column( $this->getSpecificCategoryTypes( Type::EXPENSE ), "id" );
     }
 
-    public function getAllIncomeCategories()
+    public function getAllIncomeCategories(): array
     {
         return array_column( $this->getSpecificCategoryTypes( Type::INCOME ), "name" );
     }
 
-    public function getAllExpenseCategories()
+    public function getAllExpenseCategories(): array
     {
         return array_column( $this->getSpecificCategoryTypes( Type::EXPENSE ), "name" );
     }
 
-    public function insertCategory( string $type, string $name )
+    public function insertCategory( string $type, string $name ): bool
     {
         array_push( $this->categories, (object) [
             "id"   => $this->generateCategoryId(),

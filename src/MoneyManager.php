@@ -86,7 +86,7 @@ class MoneyManager
         }
     }
 
-    public function resetTransaction()
+    public function resetApplication(): bool
     {
         printf( "⚠️ This will remove all of your transactions and the categories you added manually.\n Only Default Categories remain. Are you really sure❓\n  1. Confirm\n  0. Cancel\n" );
         $confirm = intval( readline( "Press 1 or 0: " ) );
@@ -169,7 +169,7 @@ class MoneyManager
         return $categoryId;
     }
 
-    private function storeData()
+    private function storeData(): void
     {
         file_put_contents( $this->file->DB, json_encode( [
             "categories"   => $this->categories->getCategories(),

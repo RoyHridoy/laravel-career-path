@@ -55,7 +55,7 @@ class MoneyManagerCLI
                     break;
                 case Options::RESET->value:
                     $this->printTitle( "Reset" );
-                    $this->moneyManager->resetTransaction();
+                    $this->moneyManager->resetApplication();
                     break;
                 default:
                     $this->printTitle( "Invalid Input. Try a valid Option" );
