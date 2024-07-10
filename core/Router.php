@@ -29,7 +29,6 @@ class Router
         $method   = $this->request->method();
         $path     = $this->request->getPath();
         $callback = $this->routes[$method][$path] ?? false;
-
         if ( $callback === false ) {
             $this->response->setResponseCode( 404 );
             return $this->renderView( "_404" );
@@ -40,8 +39,9 @@ class Router
         if ( is_array( $callback ) ) {
             $callback[0] = new $callback[0];
         }
+        // var_dump( $callback );
 
-        return call_user_func( $callback );
+        return call_user_func( $callback, $this->request );
     }
 
     public function renderView( string $view, array $params = [] )
@@ -51,7 +51,7 @@ class Router
         return str_replace( "{{content}}", $content, $layout );
     }
 
-    public function viewContent( string $view, array $params = [] )
+    private function viewContent( string $view, array $params = [] )
     {
         foreach ( $params as $key => $value ) {
             $$key = $value;
@@ -61,7 +61,7 @@ class Router
         return ob_get_clean();
     }
 
-    public function loadLayout()
+    private function loadLayout()
     {
         ob_start();
         include_once Application::$ROOT_PATH . "/view/layouts/main.view.php";

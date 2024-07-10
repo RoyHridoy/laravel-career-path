@@ -18,4 +18,31 @@ class Request
         }
         return substr( $path, 0, $position );
     }
+
+    public function getBody()
+    {
+        $body = [];
+        if ( $this->isGet() ) {
+            foreach ( $_GET as $key => $value ) {
+                $body[$key] = htmlspecialchars( $value );
+            }
+        }
+        if ( $this->isPost() ) {
+            foreach ( $_POST as $key => $value ) {
+                $body[$key] = htmlspecialchars( $value );
+            }
+        }
+        return $body;
+    }
+
+    private function isGet()
+    {
+        return $this->method() === 'get';
+    }
+
+    private function isPost()
+    {
+        return $this->method() === 'post';
+    }
+
 }
