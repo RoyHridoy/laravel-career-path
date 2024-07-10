@@ -1,0 +1,70 @@
+<?php
+
+namespace app\core;
+
+class Router
+{
+    public Request $request;
+    public Response $response;
+    private array $routes = [];
+
+    public function __construct( Request $request, Response $response )
+    {
+        $this->request  = $request;
+        $this->response = $response;
+    }
+
+    public function get( string $path, array | string | callable $callback ): void
+    {
+        $this->routes['get'][$path] = $callback;
+    }
+
+    public function post( string $path, array | string | callable $callback ): void
+    {
+        $this->routes['post'][$path] = $callback;
+    }
+
+    public function resolve()
+    {
+        $method   = $this->request->method();
+        $path     = $this->request->getPath();
+        $callback = $this->routes[$method][$path] ?? false;
+
+        if ( $callback === false ) {
+            $this->response->setResponseCode( 404 );
+            return $this->renderView( "_404" );
+        }
+        if ( is_string( $callback ) ) {
+            return $this->renderView( $callback );
+        }
+        if ( is_array( $callback ) ) {
+            $callback[0] = new $callback[0];
+        }
+
+        return call_user_func( $callback );
+    }
+
+    public function renderView( string $view, array $params = [] )
+    {
+        $layout  = $this->loadLayout();
+        $content = $this->viewContent( $view, $params );
+        return str_replace( "{{content}}", $content, $layout );
+    }
+
+    public function viewContent( string $view, array $params = [] )
+    {
+        foreach ( $params as $key => $value ) {
+            $$key = $value;
+        }
+        ob_start();
+        include_once Application::$ROOT_PATH . "/view/{$view}.view.php";
+        return ob_get_clean();
+    }
+
+    public function loadLayout()
+    {
+        ob_start();
+        include_once Application::$ROOT_PATH . "/view/layouts/main.view.php";
+        return ob_get_clean();
+    }
+}

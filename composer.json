@@ -1,0 +1,17 @@
+{
+    "name": "hridoy/assignment-01",
+    "description": "This is an anonymous feedback application",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "RoyHridoy",
+            "email": "royhridoy1428@gmail.com"
+        }
+    ],
+    "require": {}
+}
