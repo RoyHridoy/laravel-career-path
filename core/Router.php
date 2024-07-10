@@ -6,7 +6,8 @@ class Router
 {
     public Request $request;
     public Response $response;
-    private array $routes = [];
+    private array $routes  = [];
+    private string $layout = 'main';
 
     public function __construct( Request $request, Response $response )
     {
@@ -39,7 +40,6 @@ class Router
         if ( is_array( $callback ) ) {
             $callback[0] = new $callback[0];
         }
-        // var_dump( $callback );
 
         return call_user_func( $callback, $this->request );
     }
@@ -49,6 +49,10 @@ class Router
         $layout  = $this->loadLayout();
         $content = $this->viewContent( $view, $params );
         return str_replace( "{{content}}", $content, $layout );
+    }
+    public function setLayout( string $view ): void
+    {
+        $this->layout = $view;
     }
 
     private function viewContent( string $view, array $params = [] )
@@ -64,7 +68,7 @@ class Router
     private function loadLayout()
     {
         ob_start();
-        include_once Application::$ROOT_PATH . "/view/layouts/main.view.php";
+        include_once Application::$ROOT_PATH . "/view/layouts/{$this->layout}.view.php";
         return ob_get_clean();
     }
 }

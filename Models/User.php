@@ -23,6 +23,6 @@ class User extends Model
 
     public function register()
     {
-
+        return true;
     }
 }

@@ -56,10 +56,7 @@ abstract class Model
                 }
             }
         }
-        echo "<pre>";
-        var_dump( $this->errors );
-        echo "</pre>";
-
+        return count( $this->errors ) === 0;
     }
 
     public function errorMessages()
@@ -73,13 +70,18 @@ abstract class Model
         ];
     }
 
-    private function addError( $property, $message )
+    public function hasError( $property )
+    {
+        return $this->errors[$property] ?? false;
+    }
+
+    private function addError( $property, $message ): void
     {
         $this->errors[$property][] = $message;
     }
 
-    public function getFirstErrorMessage( $property )
+    public function getFirstErrorMessage( $property ): string
     {
-        return $this->errors[$property][0];
+        return $this->hasError( $property ) ? $this->errors[$property][0] : "";
     }
 }

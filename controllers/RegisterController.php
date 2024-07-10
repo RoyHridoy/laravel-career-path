@@ -10,22 +10,25 @@ class RegisterController extends Controller
 {
     public function index()
     {
-        return $this->view( "register" );
+        $this->setLayout( "form" );
+        return $this->view( "register", [
+            'model' => new User,
+        ] );
     }
 
     public function store( Request $request )
     {
         $user = new User;
         $user->loadData( $request->getBody() );
-        $user->validate();
 
-        // if ( $user->validate() && $user->register() ) {
-        //     return "Success";
-        // }
+        if ( $user->validate() && $user->register() ) {
+            // TODO show flash message
+            return $this->view( "login" );
+        }
 
+        $this->setLayout( "form" );
         return $this->view( "register", [
             "model" => $user,
         ] );
-
     }
 }
