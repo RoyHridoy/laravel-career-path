@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\core\Application;
 use app\core\Controller;
 use app\core\Request;
 use app\Models\User;
@@ -19,14 +20,15 @@ class RegisterController extends Controller
     public function store( Request $request )
     {
         $user = new User;
+        $this->setLayout( "form" );
         $user->loadData( $request->getBody() );
 
         if ( $user->validate() && $user->register() ) {
-            // TODO show flash message
-            return $this->view( "login" );
+            Application::$app->session->flash( 'success', 'You have successfully create your account. Please log in and enjoy' );
+            header( 'location: /login' );
+            exit;
         }
 
-        $this->setLayout( "form" );
         return $this->view( "register", [
             "model" => $user,
         ] );
