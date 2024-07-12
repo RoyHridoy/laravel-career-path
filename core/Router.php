@@ -8,6 +8,7 @@ class Router
     public Response $response;
     private array $routes  = [];
     private string $layout = 'main';
+    private string $model  = '';
 
     public function __construct( Request $request, Response $response )
     {
@@ -18,6 +19,29 @@ class Router
     public function get( string $path, array | string | callable $callback ): void
     {
         $this->routes['get'][$path] = $callback;
+        $this->modelBindings();
+    }
+
+    private function modelBindings(): void
+    {
+        $requestedPath = $this->request->getPath();
+        foreach ( $this->routes['get'] as $key => $value ) {
+            $openCurlyPosition = strpos( $key, "{" );
+            if ( $openCurlyPosition === false ) {
+                continue;
+            }
+            $routeFirstPart = substr( $key, 0, $openCurlyPosition );
+            if ( !str_starts_with( $requestedPath, $routeFirstPart ) ) {
+                continue;
+            }
+            $requestUrlId = str_replace( $routeFirstPart, "", $requestedPath );
+            $isValidId    = strpos( $requestUrlId, "/" ) === false;
+            if ( $isValidId ) {
+                $key                       = $routeFirstPart . $requestUrlId;
+                $this->routes['get'][$key] = $value;
+                $this->model               = $requestUrlId;
+            }
+        }
     }
 
     public function post( string $path, array | string | callable $callback ): void
@@ -27,9 +51,10 @@ class Router
 
     public function resolve()
     {
-        $method   = $this->request->method();
-        $path     = $this->request->getPath();
-        $callback = $this->routes[$method][$path] ?? false;
+        $method        = $this->request->method();
+        $requestedPath = $this->request->getPath();
+        $callback      = $this->routes[$method][$requestedPath] ?? false;
+
         if ( $callback === false ) {
             $this->response->setResponseCode( 404 );
             return $this->renderView( "_404" );
@@ -41,7 +66,7 @@ class Router
             $callback[0] = new $callback[0];
         }
 
-        return call_user_func( $callback, $this->request );
+        return call_user_func( $callback, $this->request, $this->model );
     }
 
     public function renderView( string $view, array $params = [] )
