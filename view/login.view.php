@@ -5,7 +5,7 @@ use app\core\Form\Form;
 $message = Application::$app->session->flash( 'success' );
 if ( $message ) {
     echo sprintf(
-        '<div class="mt-2 bg-teal-100 border border-teal-200 text-sm text-teal-800 rounded-lg p-4" role="alert">
+        '<div class="mt-2 bg-teal-100 border border-teal-200 text-sm text-teal-800 rounded-lg p-4 mb-5" role="alert">
         <span class="font-bold">%s</span>
     </div>', $message );
 }

@@ -19,4 +19,25 @@ class Session
             return $message;
         }
     }
+
+    public function requireAuth()
+    {
+        if ( !isset( $_SESSION['user'] ) ) {
+            header( "Location: login" );
+            exit;
+        }
+    }
+
+    public function destroySession()
+    {
+        unset( $_SESSION );
+        session_destroy();
+        header( 'location: /' );
+        exit;
+    }
+
+    public function isAuthenticatedUser(): bool
+    {
+        return isset( $_SESSION['user'] );
+    }
 }

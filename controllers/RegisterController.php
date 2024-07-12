@@ -11,6 +11,10 @@ class RegisterController extends Controller
 {
     public function index()
     {
+        if ( $this->isAuthenticated() ) {
+            header( 'location: /dashboard' );
+            exit;
+        }
         $this->setLayout( "form" );
         return $this->view( "register", [
             'model' => new User,

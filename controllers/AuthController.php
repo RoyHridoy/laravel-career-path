@@ -7,10 +7,14 @@ use app\core\Controller;
 use app\core\Request;
 use app\Models\User;
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     public function index()
     {
+        if ( $this->isAuthenticated() ) {
+            header( 'location: /dashboard' );
+            exit;
+        }
         $this->setLayout( "form" );
         return $this->view( "login", [
             "model" => new User,
@@ -31,11 +35,20 @@ class LoginController extends Controller
         }
 
         $user = $user->getUserByColumnName( $email, "email" );
+
         if ( !password_verify( $password, $user['password'] ) ) {
             Application::$app->session->flash( 'success', 'Username or password incorrect' );
             header( 'location: login' );
             exit;
         }
+
+        $_SESSION['user'] = $user['uniqueId'];
         header( 'location: /dashboard' );
+        exit;
+    }
+
+    public function logout()
+    {
+        Application::$app->session->destroySession();
     }
 }

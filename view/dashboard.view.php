@@ -5,7 +5,10 @@
 
         <div class="relative max-w-7xl mx-auto">
             <div class="flex justify-end">
-                <span class="block text-gray-600 font-mono border border-gray-400 rounded-xl px-2 py-1">Your feedback form link: <strong>http://localhost/feedback/sYu24jl</strong></span>
+                <div class="flex flex-col">
+                    <h3 class="font-semibold mb-2 ml-1 text-gray-700">Hey, <?php print_r($name); ?></h3>
+                    <span class="block text-gray-600 font-mono border border-gray-400 rounded-xl px-2 py-1">Your feedback form link: <strong>http://localhost/feedback/<?php echo $uniqueId ?></strong></span>
+                </div>
             </div>
             <h1 class="text-xl text-indigo-800 text-bold my-10">Received feedback</h1>
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
