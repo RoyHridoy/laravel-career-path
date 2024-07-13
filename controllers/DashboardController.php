@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\core\Controller;
-use app\Models\Message;
+use app\Models\Feedback;
 use app\Models\User;
 
 class DashboardController extends Controller
@@ -14,12 +14,12 @@ class DashboardController extends Controller
         $this->setLayout( "auth" );
         $user = new User;
         $user = $user->getUserByColumnName( $_SESSION['user'], 'uniqueId' );
-        $message = new Message;
+        $message = new Feedback;
 
         return $this->view( "dashboard", [
             'name'     => $user['name'],
             'uniqueId' => $user['uniqueId'],
-            'messages' => $message->getAllMessagesByUser( $user["uniqueId"] ),
+            'messages' => $message->getAllFeedbacksByUser( $user["uniqueId"] ),
         ] );
     }
 }

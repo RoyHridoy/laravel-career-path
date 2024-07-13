@@ -19,7 +19,7 @@ $app->router->get( '/register', [RegisterController::class, 'index'] );
 $app->router->post( '/register', [RegisterController::class, 'store'] );
 $app->router->get( '/dashboard', [DashboardController::class, 'index'] );
 $app->router->get( '/feedback/{user}', [FeedbackController::class, 'index'] );
-$app->router->get( '/post/{id}', [FeedbackController::class, 'index'] );
+$app->router->post( '/feedback', [FeedbackController::class, 'store'] );
 // TODO: Feedback submission
 
 $app->run();

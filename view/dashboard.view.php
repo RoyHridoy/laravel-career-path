@@ -15,7 +15,7 @@
                 <?php foreach ($messages as $message) : ?>
                     <div class="relative flex items-center px-6 py-5 space-x-3 bg-white border border-gray-300 rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">
                         <div class="focus:outline-none">
-                            <p class="text-gray-500"><?php print $message["message"]; ?></p>
+                            <p class="text-gray-500"><?php print $message["feedback"]; ?></p>
                         </div>
                     </div>
                <?php endforeach; ?>
