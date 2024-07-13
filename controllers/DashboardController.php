@@ -12,14 +12,16 @@ class DashboardController extends Controller
     {
         $this->auth();
         $this->setLayout( "auth" );
-        $user = new User;
-        $user = $user->getUserByColumnName( $_SESSION['user'], 'uniqueId' );
-        $message = new Feedback;
+        $user      = new User;
+        $user      = $user->getUserByColumnName( $_SESSION['user'], 'uniqueId' );
+        $message   = new Feedback;
+        $feedbacks = $message->getAllFeedbacksByUser( $user["uniqueId"] );
+        rsort( $feedbacks );
 
         return $this->view( "dashboard", [
             'name'     => $user['name'],
             'uniqueId' => $user['uniqueId'],
-            'messages' => $message->getAllFeedbacksByUser( $user["uniqueId"] ),
+            'messages' => $feedbacks,
         ] );
     }
 }

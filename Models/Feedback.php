@@ -23,9 +23,10 @@ class Feedback extends Model
         $feedbacks = $this->getAllFeedbacks();
 
         $feedback = [
-            "id"       => $this->generateFeedbackId(),
-            "feedback" => $this->feedback,
-            "userId"   => $this->userId,
+            "id"        => $this->generateFeedbackId(),
+            "feedback"  => $this->feedback,
+            "userId"    => $this->userId,
+            "createdAt" => time(),
         ];
         array_push( $feedbacks, $feedback );
         $this->insertData( $feedbacks, Application::$app->database::$DB_MESSAGE );

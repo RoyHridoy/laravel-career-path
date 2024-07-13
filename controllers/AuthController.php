@@ -29,7 +29,7 @@ class AuthController extends Controller
         $existingUsers = $user->getAllByColumnName( 'email' );
 
         if ( !in_array( $email, $existingUsers, true ) ) {
-            Application::$app->session->flash( 'success', 'Username or password incorrect' );
+            Application::$app->session->flash( 'error', 'Username or password incorrect' );
             header( 'location: login' );
             exit;
         }
@@ -37,7 +37,7 @@ class AuthController extends Controller
         $user = $user->getUserByColumnName( $email, "email" );
 
         if ( !password_verify( $password, $user['password'] ) ) {
-            Application::$app->session->flash( 'success', 'Username or password incorrect' );
+            Application::$app->session->flash( 'error', 'Username or password incorrect' );
             header( 'location: login' );
             exit;
         }

@@ -8,7 +8,7 @@ class Form
 {
     public static function start( string $method = "post", string $action = "" ): object
     {
-        echo sprintf( '<form class="space-y-6" action="%s" method="%s" novalidate>', $action, $method );
+        echo sprintf( '<form class="space-y-6" action="%s" method="%s">', $action, $method );
         return new Form;
     }
 
