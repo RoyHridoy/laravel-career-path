@@ -1,40 +1,24 @@
 <main class="">
-    <div class="relative flex min-h-screen overflow-hidden bg-gray-50 py-6 sm:py-12">
-        <img src="./images/beams.jpg" alt="" class="absolute top-1/2 left-1/2 max-w-none -translate-x-1/2 -translate-y-1/2" width="1308" />
+    <div class="relative flex min-h-screen py-6 overflow-hidden bg-gray-50 sm:py-12">
+        <img src="./images/beams.jpg" alt="" class="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 max-w-none" width="1308" />
         <div class="absolute inset-0 bg-[url(./images/grid.svg)] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
 
-        <div class="relative max-w-7xl mx-auto">
+        <div class="relative mx-auto max-w-7xl">
             <div class="flex justify-end">
                 <div class="flex flex-col">
-                    <h3 class="font-semibold mb-2 ml-1 text-gray-700">Hey, <?php print_r($name); ?></h3>
-                    <span class="block text-gray-600 font-mono border border-gray-400 rounded-xl px-2 py-1">Your feedback form link: <strong>http://localhost/feedback/<?php echo $uniqueId ?></strong></span>
+                    <h3 class="mb-2 ml-1 font-semibold text-gray-700">Hey, <?php print_r($name); ?></h3>
+                    <span class="block px-2 py-1 font-mono text-gray-600 border border-gray-400 rounded-xl">Your feedback form link: <strong>http://localhost/feedback/<?php echo $uniqueId ?></strong></span>
                 </div>
             </div>
-            <h1 class="text-xl text-indigo-800 text-bold my-10">Received feedback</h1>
+            <h1 class="my-10 text-xl text-indigo-800 text-bold">Received feedback</h1>
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                <div class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">
-                    <div class="focus:outline-none">
-                        <p class="text-gray-500">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                <?php foreach ($messages as $message) : ?>
+                    <div class="relative flex items-center px-6 py-5 space-x-3 bg-white border border-gray-300 rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">
+                        <div class="focus:outline-none">
+                            <p class="text-gray-500"><?php print $message["message"]; ?></p>
+                        </div>
                     </div>
-                </div>
-
-                <div class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">
-                    <div class="focus:outline-none">
-                        <p class="text-gray-500">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness.</p>
-                    </div>
-                </div>
-
-                <div class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">
-                    <div class="focus:outline-none">
-                        <p class="text-gray-500">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. </p>
-                    </div>
-                </div>
-
-                <div class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">
-                    <div class="focus:outline-none">
-                        <p class="text-gray-500">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    </div>
-                </div>
+               <?php endforeach; ?>
             </div>
         </div>
 
